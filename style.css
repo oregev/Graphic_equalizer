@@ -32,7 +32,6 @@ body {
 #container {
 	width: fit-content;
 	margin-top: 20px;
-	border: 1px solid;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
