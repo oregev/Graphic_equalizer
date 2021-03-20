@@ -45,7 +45,7 @@ function runStart() {
 		filter.frequency.value = freq;
 		filter.gain.value = 0;
 		filter.type = "peaking";
-		filter.Q.value = 0.3;
+		filter.Q.value = 0.1;
 		return filter;
 	};
 
@@ -96,13 +96,35 @@ function runStart() {
 
 	const audioElement = document.getElementById("source");
 	const source = ctx.createMediaElementSource(audioElement);
+	const analyser = ctx.createAnalyser();
 	const gainNode = ctx.createGain();
 	const firstFilter = filters[0].filter;
 	const lastFilter = filters[filters.length - 1].filter;
 
 	source.connect(gainNode);
 	gainNode.connect(firstFilter);
-	lastFilter.connect(ctx.destination);
+	lastFilter.connect(analyser);
+	analyser.connect(ctx.destination);
+
+	//===============================================
+	const canvas = document.getElementById("canvas");
+	const canvasCtx = canvas.getContext("2d");
+	const audioDataArray = new Uint8Array(analyser.frequencyBinCount);
+
+	const animateAudio = () => {
+		canvasCtx.clearRect(0, 0, 1200, 220);
+		analyser.getByteFrequencyData(audioDataArray);
+		let xPos = 1;
+
+		for (let i = 10; i < audioDataArray.length; i++) {
+			canvasCtx.fillRect(xPos, 220, 2, -audioDataArray[i]);
+			canvasCtx.fillStyle = "rgb(255, 213, 116)";
+			canvasCtx.fill();
+			xPos += 1.2;
+		}
+		requestAnimationFrame(animateAudio);
+	};
+	requestAnimationFrame(animateAudio);
 }
 
 const mask = document.getElementById("mask");
