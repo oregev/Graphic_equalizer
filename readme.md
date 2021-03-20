@@ -1,3 +1,3 @@
 # Graphic_equalizer
 
-A 31-Band graphic equalizer with the Web Audio API.
+A 31-Band graphic equalizer with the Web Audio API.  ( DESKTOP ONLY )
